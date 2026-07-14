@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /spasibo/
+
+Sitemap: https://ava-solution.kz/sitemap.xml

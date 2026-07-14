@@ -1,0 +1,141 @@
+/* ============================================================
+   AVA Solution — global stylesheet
+   Design tokens + base + behaviour classes that replace the
+   Design-Components runtime (hover states, responsive header,
+   FAQ accordion, sticky mobile CTA). Layout-level styling stays
+   inline on the elements to keep the export pixel-faithful.
+   ============================================================ */
+
+:root {
+  /* Brand / accent */
+  --accent:        #ED1C24;
+  --accent-hover:  #C8161D;
+  --accent-tint:   #FFF1F1;
+
+  /* Text */
+  --ink:           #15171A;
+  --text-muted:    #5A5E66;
+  --text-faint:    #9A9DA3;
+
+  /* Surfaces and lines */
+  --bg:            #FFFFFF;
+  --bg-soft:       #F2F3F5;
+  --bg-soft-2:     #FAFBFC;
+  --line:          #ECEDF0;
+  --line-2:        #E2E4E8;
+  --surface-dark:  #13151A;
+
+  /* Messengers */
+  --wa:            #25D366;
+  --tg:            #229ED9;
+
+  /* Shadows */
+  --shadow-card:     0 24px 44px -30px rgba(20,20,30,.30);
+  --shadow-elevated: 0 28px 50px -30px rgba(20,20,30,.28);
+  --shadow-cta:      0 14px 30px -12px rgba(237,28,36,.55);
+
+  /* Radii */
+  --r-sm:   10px;
+  --r:      12px;
+  --r-card: 18px;
+  --r-lg:   20px;
+  --pill:   999px;
+
+  /* Containers */
+  --container: 1240px;
+  --measure:   680px;
+  --form-w:    600px;
+
+  /* Spacing scale */
+  --s-1: 8px;  --s-2: 12px; --s-3: 16px; --s-4: 18px; --s-5: 20px;
+  --s-6: 24px; --s-7: 28px; --s-8: 32px; --s-9: 40px; --s-10: 48px;
+}
+
+/* ---------- Reset & base ---------- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Manrope, Inter, -apple-system, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; }
+img, svg { max-width: 100%; }
+::selection { background: var(--accent); color: #fff; }
+
+/* Visible keyboard focus for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Keyframes (from the export) ---------- */
+@keyframes avaPulse { 0% { transform: scale(1); opacity: 1; } 70% { transform: scale(2.6); opacity: 0; } 100% { opacity: 0; } }
+@keyframes avaDash  { to { stroke-dashoffset: -1000; } }
+@keyframes avaFade  { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes avaDrift { to { transform: translateX(-50%); } }
+@keyframes avaBlip  { 0%,100% { transform: scale(.8); opacity: .7; } 50% { transform: scale(1.1); opacity: 1; } }
+@keyframes avaRing  { 0% { transform: scale(.6); opacity: .8; } 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes avaSweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ---------- Hover states (replace DC `style-hover`) ---------- */
+.btn-primary { transition: background .2s ease; }
+.btn-primary:hover { background: var(--accent-hover); }
+
+.btn-outline { transition: border-color .2s ease; }
+.btn-outline:hover { border-color: var(--ink); }
+
+/* Card lifts — three variants matching the export's shadows */
+.lift-1, .lift-2, .lift-3 { transition: transform .25s, box-shadow .25s, border-color .25s; }
+.lift-1:hover { transform: translateY(-4px); box-shadow: 0 24px 44px -30px rgba(20,20,30,.30); }
+.lift-2:hover { transform: translateY(-5px); box-shadow: 0 28px 50px -30px rgba(20,20,30,.28); }
+.lift-3:hover { transform: translateY(-5px); box-shadow: 0 28px 50px -30px rgba(20,20,30,.28); border-color: #E0E1E5; }
+
+/* Border-colour hovers (about-page card, contact messenger buttons) */
+.bd-dark, .bd-wa, .bd-tg { transition: border-color .2s ease; }
+.bd-dark:hover { border-color: #3A3F49; }
+.bd-wa:hover { border-color: var(--wa); }
+.bd-tg:hover { border-color: var(--tg); }
+
+/* Cases page: stack the two-column card on narrow screens */
+@media (max-width: 760px) { .case-grid { grid-template-columns: 1fr !important; } }
+
+/* Language dropdown */
+.lang-dd { position: relative; }
+.lang-dd > summary { list-style: none; }
+.lang-dd > summary::-webkit-details-marker { display: none; }
+.lang-dd[open] > summary .lang-arrow { transform: rotate(180deg); }
+.lang-menu a:hover { background: #F6F7F9; }
+
+/* ---------- Responsive header ---------- */
+/* Desktop ≥1200px shows full nav; below shows hamburger + sticky CTA. */
+.desktop-only { display: flex; }
+.mobile-only  { display: none; }
+.mobile-menu  { display: none; }
+.mobile-cta   { display: none; }
+
+@media (max-width: 1199px) {
+  .desktop-only      { display: none !important; }
+  .mobile-only       { display: flex !important; }
+  .mobile-menu.open  { display: block; }
+  .mobile-cta        { display: flex; }
+  /* keep content clear of the sticky bottom CTA bar */
+  body { padding-bottom: 76px; }
+}
+
+/* ---------- FAQ accordion ---------- */
+.faq-a { display: none; }
+.faq-item.open .faq-a { display: block; }
+
+/* ---------- Forms ---------- */
+.lead-form input:focus,
+.lead-form select:focus { border-color: var(--accent); outline: none; }
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
